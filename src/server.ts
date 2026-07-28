@@ -23,6 +23,11 @@ app.get('/', (_req: Request, res: Response) => {
   });
 });
 
+app.use((err: any, _req: Request, res: Response, _next: any) => {
+  console.error(err);
+  res.status(err.status || 500).json({ error: err.message || 'Erro interno do servidor.' });
+});
+
 const PORT = Number(process.env.PORT || 3000);
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);

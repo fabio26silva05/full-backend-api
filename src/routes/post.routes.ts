@@ -1,16 +1,11 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import { postController } from '../controllers/post.controller';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
 const router = Router();
 
-router.get('/', (_req: Request, res: Response) => {
-  return res.json([
-    {
-      id: 1,
-      title: 'Primeiro post',
-      content: 'Exemplo de publicação para demonstrar a API.',
-      author: 'Fábio'
-    }
-  ]);
-});
+router.get('/', postController.list);
+router.get('/:id', postController.show);
+router.post('/', authMiddleware, postController.create);
 
 export default router;

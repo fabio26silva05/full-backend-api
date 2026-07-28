@@ -1,14 +1,11 @@
-import { Router, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import { Router } from 'express';
+import { authController } from '../controllers/auth.controller';
+import { authMiddleware } from '../middlewares/auth';
 
 const router = Router();
 
-router.post('/login', (_req: Request, res: Response) => {
-  const token = jwt.sign({ id: 'demo-user', email: 'demo@portfolio.com' }, process.env.JWT_SECRET || 'portfolio-dev-secret', {
-    expiresIn: '1h'
-  });
-
-  return res.json({ token });
-});
+router.post('/register', authController.register);
+router.post('/login', authController.login);
+router.get('/me', authMiddleware, authController.me);
 
 export default router;

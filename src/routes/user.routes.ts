@@ -1,11 +1,9 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import { userController } from '../controllers/user.controller';
 
 const router = Router();
 
-router.get('/', (_req: Request, res: Response) => {
-  return res.json([
-    { id: 1, name: 'Fábio', email: 'fabio@portfolio.com' }
-  ]);
-});
+router.get('/', userController.list);
+router.get('/:id', userController.show);
 
 export default router;
