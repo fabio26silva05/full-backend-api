@@ -1,0 +1,35 @@
+{
+  "name": "portfolio-backend-api",
+  "version": "1.0.0",
+  "description": "API backend de exemplo para portfólio, com autenticação, usuários e posts.",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "ts-node src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "test": "echo \"No tests configured yet\""
+  },
+  "keywords": [
+    "typescript",
+    "express",
+    "backend",
+    "portfolio"
+  ],
+  "author": "Fábio",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
