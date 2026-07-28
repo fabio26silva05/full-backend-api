@@ -3,6 +3,8 @@ node_modules/
 
 # Variáveis de ambiente e segredos
 .env
+.env.local
+.env.*.local
 
 # Compilação e Build
 dist/
