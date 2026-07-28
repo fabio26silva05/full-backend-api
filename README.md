@@ -1,14 +1,16 @@
 # Portfolio Backend API
 
-API REST em TypeScript com autenticação JWT, gerenciamento de usuários e posts. Projeto desenvolvido para demonstrar conhecimento em arquitetura backend moderna e boas práticas de desenvolvimento.
+API REST em TypeScript com autenticação JWT, usuários e posts, construída para demonstrar um backend modular e pronto para portfólio.
 
 ## Funcionalidades
 
 - ✅ Autenticação com JWT
-- ✅ CRUD de usuários e posts
-- ✅ Validação de dados
-- ✅ Estrutura modular (routes, controllers, middlewares)
-- ✅ Tratamento de erros robusto
+- ✅ Registro e login de usuários
+- ✅ Listagem de usuários
+- ✅ Listagem de posts
+- ✅ Criação de posts autenticados
+- ✅ Middleware de autenticação
+- ✅ Tratamento de erros global
 - ✅ Configuração com variáveis de ambiente
 
 ## Tech Stack
@@ -18,30 +20,21 @@ API REST em TypeScript com autenticação JWT, gerenciamento de usuários e post
 - **Framework:** Express.js
 - **ORM:** Prisma
 - **Banco de Dados:** PostgreSQL
-- **Autenticação:** JWT (jsonwebtoken)
-- **Validação:** Zod (opcional)
+- **Autenticação:** JWT + bcrypt
 
 ## Como rodar
 
 ### Pré-requisitos
 - Node.js 18+
-- npm ou yarn
+- npm
 - PostgreSQL rodando
 
 ### Instalação
 
 ```bash
-# Clone o repositório
-git clone https://github.com/fabio26silva05/full-backend-api.git
-cd full-backend-api
-
-# Instale as dependências
 npm install
-
-# Configure o banco de dados
+npx prisma generate
 npx prisma migrate dev --name init
-
-# Inicie o servidor
 npm run dev
 ```
 
@@ -53,59 +46,58 @@ Crie um arquivo `.env` na raiz do projeto:
 DATABASE_URL="postgresql://user:password@localhost:5432/portfolio_api"
 JWT_SECRET="sua_chave_secreta_super_segura"
 PORT=3000
-NODE_ENV=development
 ```
+
+## Configuração
+
+1. Copie `.env.example` para `.env`:
+```bash
+cp .env.example .env
+```
+
+2. Atualize as variáveis conforme necessário
 
 ## Endpoints
 
 ### Auth
-```
+```http
 POST /auth/register
-Body: { email, password, name }
-Response: { id, email, name, token }
+Content-Type: application/json
 
+{
+  "name": "Fábio",
+  "email": "fabio@email.com",
+  "password": "123456"
+}
+```
+
+```http
 POST /auth/login
-Body: { email, password }
-Response: { token, user: { id, email, name } }
+Content-Type: application/json
+
+{
+  "email": "fabio@email.com",
+  "password": "123456"
+}
+```
+
+```http
+GET /auth/me
+Authorization: Bearer <token>
 ```
 
 ### Users
-```
+```http
+GET /users
 GET /users/:id
-Headers: { Authorization: Bearer {token} }
-Response: { id, email, name, createdAt }
-
-PUT /users/:id
-Headers: { Authorization: Bearer {token} }
-Body: { name, email }
-Response: { id, email, name, updatedAt }
-
-DELETE /users/:id
-Headers: { Authorization: Bearer {token} }
-Response: { message: "User deleted" }
 ```
 
 ### Posts
-```
-POST /posts
-Headers: { Authorization: Bearer {token} }
-Body: { title, content }
-Response: { id, title, content, authorId, createdAt }
-
+```http
 GET /posts
-Response: [{ id, title, content, author: { name, email }, createdAt }]
-
 GET /posts/:id
-Response: { id, title, content, author: { name, email }, createdAt }
-
-PUT /posts/:id
-Headers: { Authorization: Bearer {token} }
-Body: { title, content }
-Response: { id, title, content, updatedAt }
-
-DELETE /posts/:id
-Headers: { Authorization: Bearer {token} }
-Response: { message: "Post deleted" }
+POST /posts
+Authorization: Bearer <token>
 ```
 
 ## Exemplo de requisição
@@ -116,9 +108,9 @@ Response: { message: "Post deleted" }
 curl -X POST http://localhost:3000/auth/register \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "user@example.com",
-    "password": "senha123",
-    "name": "João Silva"
+    "name": "Fábio",
+    "email": "fabio@email.com",
+    "password": "123456"
   }'
 ```
 
@@ -128,93 +120,52 @@ curl -X POST http://localhost:3000/auth/register \
 curl -X POST http://localhost:3000/auth/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "user@example.com",
-    "password": "senha123"
-  }'
-```
-
-### Criar post (autenticado)
-
-```bash
-curl -X POST http://localhost:3000/posts \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer SEU_TOKEN_AQUI" \
-  -d '{
-    "title": "Meu primeiro post",
-    "content": "Conteúdo do post aqui"
+    "email": "fabio@email.com",
+    "password": "123456"
   }'
 ```
 
 ## Estrutura do projeto
 
-```
+```text
 src/
 ├── controllers/
-│   ├── authController.ts
-│   ├── userController.ts
-│   └── postController.ts
+│   ├── auth.controller.ts
+│   ├── post.controller.ts
+│   └── user.controller.ts
 ├── middlewares/
+│   ├── auth.middleware.ts
 │   └── auth.ts
+├── lib/
+│   └── prisma.ts
 ├── routes/
 │   ├── auth.routes.ts
-│   ├── user.routes.ts
-│   └── post.routes.ts
-├── server.ts
-└── types/
-    └── index.ts
+│   ├── post.routes.ts
+│   └── user.routes.ts
+└── server.ts
 prisma/
 └── schema.prisma
 ```
 
-## Deploy
-
-A API está disponível em: [link do deploy]
-
-Você pode fazer deploy gratuitamente em:
-- **Render:** https://render.com
-- **Railway:** https://railway.app
-- **Vercel:** https://vercel.com
-
-## Desenvolvimento
-
-### Scripts disponíveis
+## Scripts disponíveis
 
 ```bash
-# Rodar em desenvolvimento
 npm run dev
-
-# Build para produção
 npm run build
-
-# Rodar produção
-npm run start
-
-# Executar testes (quando implementados)
-npm run test
-
-# Verificar tipos TypeScript
-npm run type-check
+npm start
+npm run prisma:generate
+npm run prisma:migrate
 ```
 
-## Próximos passos
+## Deploy
 
-- [ ] Implementar testes unitários (Jest)
-- [ ] Adicionar validação com Zod
-- [ ] Implementar refresh tokens
-- [ ] Adicionar rate limiting
-- [ ] Documentação com Swagger/OpenAPI
-- [ ] Setup com Docker
-- [ ] Implementar paginação
+A API pode ser publicada em plataformas como Render ou Railway com suporte a Node.js e PostgreSQL.
 
-## Contribuindo
+## TODO
 
-Sinta-se livre para fazer fork, criar branches e submeter pull requests.
-
-## Contato
-
-- **Email:** fabio26silva05@gmail.com
-- **LinkedIn:** https://linkedin.com/in/eufabiosb
-- **GitHub:** https://github.com/fabio26silva05
-
----
+- [ ] Update/delete de posts
+- [ ] Update/delete de usuários
+- [ ] Validação com Zod
+- [ ] Testes unitários
+- [ ] Swagger/OpenAPI
 
