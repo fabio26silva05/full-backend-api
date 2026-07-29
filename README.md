@@ -43,7 +43,7 @@ npm run dev
 Crie um arquivo `.env` na raiz do projeto:
 
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/portfolio_api"
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/portfolio_api"
 JWT_SECRET="sua_chave_secreta_super_segura"
 PORT=3000
 ```
@@ -65,9 +65,9 @@ POST /auth/register
 Content-Type: application/json
 
 {
-  "name": "Fábio",
-  "email": "fabio@email.com",
-  "password": "123456"
+  "name": "Usuário Exemplo",
+  "email": "usuario.exemplo@example.com",
+  "password": "sua_senha_secreta"
 }
 ```
 
@@ -76,8 +76,8 @@ POST /auth/login
 Content-Type: application/json
 
 {
-  "email": "fabio@email.com",
-  "password": "123456"
+  "email": "usuario.exemplo@example.com",
+  "password": "sua_senha_secreta"
 }
 ```
 
@@ -108,9 +108,9 @@ Authorization: Bearer <token>
 curl -X POST http://localhost:3000/auth/register \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Fábio",
-    "email": "fabio@email.com",
-    "password": "123456"
+    "name": "Usuário Exemplo",
+    "email": "usuario.exemplo@example.com",
+    "password": "sua_senha_secreta"
   }'
 ```
 
@@ -120,8 +120,8 @@ curl -X POST http://localhost:3000/auth/register \
 curl -X POST http://localhost:3000/auth/login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "fabio@email.com",
-    "password": "123456"
+    "email": "usuario.exemplo@example.com",
+    "password": "sua_senha_secreta"
   }'
 ```
 
@@ -168,4 +168,3 @@ A API pode ser publicada em plataformas como Render ou Railway com suporte a Nod
 - [ ] Validação com Zod
 - [ ] Testes unitários
 - [ ] Swagger/OpenAPI
-
