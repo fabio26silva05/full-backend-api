@@ -1,128 +1,88 @@
 # Portfolio Backend API
 
-API REST em TypeScript com autenticação JWT, usuários e posts, construída para demonstrar um backend modular e pronto para portfólio.
+API REST em TypeScript com autenticação JWT, usuários e posts, desenvolvida como exemplo de backend profissional para portfólio. O projeto foi estruturado com foco em clareza, separação de responsabilidades e facilidade de leitura.
 
-## Funcionalidades
+## Visão geral
 
-- ✅ Autenticação com JWT
-- ✅ Registro e login de usuários
-- ✅ Listagem de usuários
-- ✅ Listagem de posts
-- ✅ Criação de posts autenticados
-- ✅ Middleware de autenticação
-- ✅ Tratamento de erros global
-- ✅ Configuração com variáveis de ambiente
+A aplicação expõe endpoints para:
 
-## Tech Stack
+- cadastro e autenticação de usuários;
+- consulta de usuários;
+- listagem e criação de posts vinculados ao autor;
+- proteção de rotas por meio de middleware de autenticação.
 
-- **Runtime:** Node.js
-- **Linguagem:** TypeScript
-- **Framework:** Express.js
-- **ORM:** Prisma
-- **Banco de Dados:** PostgreSQL
-- **Autenticação:** JWT + bcrypt
+## Stack
 
-## Como rodar
+- Runtime: Node.js
+- Linguagem: TypeScript
+- Framework: Express
+- ORM: Prisma
+- Banco de dados: PostgreSQL
+- Autenticação: JWT + bcrypt
 
-### Pré-requisitos
+## Requisitos
+
 - Node.js 18+
 - npm
-- PostgreSQL rodando
+- PostgreSQL em execução
 
-### Instalação
+## Configuração local
+
+1. Instale as dependências:
 
 ```bash
 npm install
-npx prisma generate
-npx prisma migrate dev --name init
-npm run dev
 ```
 
-### Variáveis de ambiente
+2. Gere o cliente Prisma:
 
-Crie um arquivo `.env` na raiz do projeto:
+```bash
+npx prisma generate
+```
+
+3. Aplique as migrações iniciais:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+4. Crie um arquivo .env na raiz com:
 
 ```env
 DATABASE_URL="postgresql://usuario:senha@localhost:5432/portfolio_api"
-JWT_SECRET="sua_chave_secreta_super_segura"
+JWT_SECRET="uma_chave_secreta_forte"
 PORT=3000
 ```
 
-## Configuração
+5. Inicie a API:
 
-1. Copie `.env.example` para `.env`:
 ```bash
-cp .env.example .env
+npm run dev
 ```
 
-2. Atualize as variáveis conforme necessário
+## Endpoints principais
 
-## Endpoints
+### Autenticação
 
-### Auth
 ```http
 POST /auth/register
-Content-Type: application/json
-
-{
-  "name": "Usuário Exemplo",
-  "email": "usuario.exemplo@example.com",
-  "password": "sua_senha_secreta"
-}
-```
-
-```http
 POST /auth/login
-Content-Type: application/json
-
-{
-  "email": "usuario.exemplo@example.com",
-  "password": "sua_senha_secreta"
-}
-```
-
-```http
 GET /auth/me
-Authorization: Bearer <token>
 ```
 
-### Users
+### Usuários
+
 ```http
 GET /users
 GET /users/:id
 ```
 
 ### Posts
+
 ```http
 GET /posts
 GET /posts/:id
 POST /posts
-Authorization: Bearer <token>
-```
-
-## Exemplo de requisição
-
-### Registrar usuário
-
-```bash
-curl -X POST http://localhost:3000/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Usuário Exemplo",
-    "email": "usuario.exemplo@example.com",
-    "password": "sua_senha_secreta"
-  }'
-```
-
-### Fazer login
-
-```bash
-curl -X POST http://localhost:3000/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "usuario.exemplo@example.com",
-    "password": "sua_senha_secreta"
-  }'
 ```
 
 ## Estrutura do projeto
@@ -134,20 +94,18 @@ src/
 │   ├── post.controller.ts
 │   └── user.controller.ts
 ├── middlewares/
-│   ├── auth.middleware.ts
-│   └── auth.ts
+│   └── auth.middleware.ts
 ├── lib/
+│   ├── auth.ts
 │   └── prisma.ts
 ├── routes/
 │   ├── auth.routes.ts
 │   ├── post.routes.ts
 │   └── user.routes.ts
 └── server.ts
-prisma/
-└── schema.prisma
 ```
 
-## Scripts disponíveis
+## Scripts
 
 ```bash
 npm run dev
@@ -157,14 +115,10 @@ npm run prisma:generate
 npm run prisma:migrate
 ```
 
-## Deploy
+## Próximos passos
 
-A API pode ser publicada em plataformas como Render ou Railway com suporte a Node.js e PostgreSQL.
-
-## TODO
-
-- [ ] Update/delete de posts
-- [ ] Update/delete de usuários
-- [ ] Validação com Zod
-- [ ] Testes unitários
-- [ ] Swagger/OpenAPI
+- atualização e remoção de posts;
+- atualização e remoção de usuários;
+- validação de entrada com Zod;
+- testes automatizados;
+- documentação com Swagger/OpenAPI.
